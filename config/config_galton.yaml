@@ -1,0 +1,3 @@
+galton_triangle_matrix:
+  height: 15       # number of rows in the Galton board
+  balls: 100       # number of balls to drop
