@@ -25,14 +25,18 @@ class GaltonTriangleMatrix(BaseExperiment):
         self.board = board
         print(f"[✓] Simulation complete ({self.balls} balls, height={self.height})")
 
-    def plot(self, save_folder=None):
+    def plot(self, save_folder=None, filename=None):
         if self.board is None:
             raise RuntimeError("Run the experiment before plotting.")
         fig, ax = plt.subplots(figsize=(6, 6))
         im = ax.imshow(self.board, cmap="hot", origin="upper")
         fig.colorbar(im, ax=ax, label="Number of balls")
-        ax.set_title("Galton Board: Final Positions of Balls")
+        ax.set_title(f"Galton Board: Final Positions of Balls (height={self.height}, balls={self.balls})")
         ax.set_xlabel("Column (j)")
         ax.set_ylabel("Row (i)")
         # Use dynamic folder if provided
-        self.save_plot(fig, save_folder=save_folder)
+
+        if save_folder:
+            self.save_plot(fig, save_folder=save_folder, filename=filename)
+        else:
+            plt.show()

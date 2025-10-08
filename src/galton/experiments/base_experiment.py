@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
 import matplotlib.pyplot as plt
-import os
 
 
 class BaseExperiment(ABC):

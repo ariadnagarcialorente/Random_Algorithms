@@ -1,3 +1,12 @@
-galton_triangle_matrix:
-  height: 15       # number of rows in the Galton board
-  balls: 100       # number of balls to drop
+experiments:
+  galton_triangle_matrix:
+    - height: 10
+      balls: 100
+
+  galton_binomial:
+    - heights: [10, 20, 50, 75, 100]
+      balls_list: [10, 25, 50, 100, 200]
+
+  binomial_normal:
+    - n_values: [10, 25, 50, 100, 1000]
+      N: 50000
