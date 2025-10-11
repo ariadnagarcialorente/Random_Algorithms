@@ -5,7 +5,7 @@ from itertools import product
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 
-from src.galton.experiments.base_experiment import BaseExperiment
+from .base_experiment import BaseExperiment
 
 
 class GaltonBinomial(BaseExperiment):

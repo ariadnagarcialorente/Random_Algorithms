@@ -2,7 +2,7 @@ from random import randrange
 import numpy as np
 import matplotlib.pyplot as plt
 
-from src.galton.experiments.base_experiment import BaseExperiment
+from .base_experiment import BaseExperiment
 
 
 class GaltonTriangleMatrix(BaseExperiment):
