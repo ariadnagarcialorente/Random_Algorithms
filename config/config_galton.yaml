@@ -37,31 +37,11 @@ experiments:
       balls: 200000
 
   galton_binomial:
-    # Satndard variation of balls and height
-    - heights: [5, 10, 15, 20, 25]
-      balls_list: [100, 500, 1000, 5000, 10000]
-      
-    - heights: [30, 40, 50, 60, 70]
-      balls_list: [2500, 5000, 10000, 25000, 50000]
-      
-    - heights: [75, 100, 125, 150, 175]
-      balls_list: [5000, 10000, 25000, 50000, 100000]
-      
-    - heights: [200, 250, 300, 400, 500]
-      balls_list: [10000, 25000, 50000, 100000, 200000]
-      
-    # Extreme cases
-    - heights: [200, 250, 300, 400, 500]
-      balls_list: [200, 250, 300, 400, 500]
-      
-    - heights: [20, 25, 30, 35, 40]
-      balls_list: [5, 10, 15, 20, 25]
-
-    - heights: [2500, 5000, 10000, 25000, 50000]
-      balls_list: [100, 500, 1000, 5000, 10000]
+    # Standard variation of balls and height
+    - heights: [10, 25, 50, 75, 100]
+      balls_list: [100, 250, 500, 750, 1000]
 
   binomial_normal:
-    binomial_normal:
     # Small n values
     - n_values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
       N: 50000
