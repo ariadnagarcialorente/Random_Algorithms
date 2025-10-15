@@ -18,6 +18,7 @@ experiments:
       
 
   galton_binomial:
+<<<<<<< HEAD
     # Satndard variation of balls and height
     - heights: [5, 10, 15, 20, 25]
       balls_list: [100, 500, 1000, 5000, 10000]
@@ -38,6 +39,16 @@ experiments:
 
 
   binomial_normal:
+=======
+    # Standard variation of balls and height
+    - heights: [10, 25, 50, 75, 100]
+      balls_list: [100, 250, 500, 750, 1000]
+
+  binomial_normal:
+    # Small n values
+    - n_values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      N: 50000
+>>>>>>> refs/remotes/origin/main
       
     # Changing N
     - n_values: [60, 70, 80, 90, 100, 125, 150, 175, 200]
