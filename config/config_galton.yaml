@@ -16,25 +16,6 @@ experiments:
     - height: 20
       balls: 10000
       
-    # Large experiments
-    - height: 50
-      balls: 5000
-    - height: 50
-      balls: 25000
-    - height: 100
-      balls: 10000
-    - height: 100
-      balls: 50000
-      
-    # Extreme experiments
-    - height: 200
-      balls: 25000
-    - height: 200
-      balls: 100000
-    - height: 500
-      balls: 50000
-    - height: 500
-      balls: 200000
 
   galton_binomial:
     # Satndard variation of balls and height
@@ -44,44 +25,25 @@ experiments:
     - heights: [30, 40, 50, 60, 70]
       balls_list: [2500, 5000, 10000, 25000, 50000]
       
-    - heights: [75, 100, 125, 150, 175]
-      balls_list: [5000, 10000, 25000, 50000, 100000]
-      
-    - heights: [200, 250, 300, 400, 500]
-      balls_list: [10000, 25000, 50000, 100000, 200000]
       
     # Extreme cases
     - heights: [200, 250, 300, 400, 500]
       balls_list: [200, 250, 300, 400, 500]
       
+    - heights:  [2500, 5000, 10000, 25000]
+      balls_list: [100, 5000, 10000, 500000]
+
     - heights: [20, 25, 30, 35, 40]
       balls_list: [5, 10, 15, 20, 25]
 
-    - heights: [2500, 5000, 10000, 25000, 50000]
-      balls_list: [100, 500, 1000, 5000, 10000]
 
   binomial_normal:
-    binomial_normal:
-    # Small n values
-    - n_values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-      N: 50000
       
     # Changing N
-    - n_values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    - n_values: [60, 70, 80, 90, 100, 125, 150, 175, 200]
       N: 1000
       
     # Medium n values
     - n_values: [60, 70, 80, 90, 100, 125, 150, 175, 200]
       N: 50000
       
-    # Large n values
-    - n_values: [250, 300, 400, 500, 600, 700, 800, 900, 1000]
-      N: 50000
-      
-    # Very large n values
-    - n_values: [1500, 2000, 2500, 3000, 4000, 5000]
-      N: 50000
-      
-    # Extreme values
-    - n_values: [10000, 15000, 20000, 25000, 50000]
-      N: 50000
