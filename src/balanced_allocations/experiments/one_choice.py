@@ -3,9 +3,9 @@ import numpy as np
 
 from .base_experiment import BaseExperiment
 
-class one_choice: 
+class one_choice(BaseExperiment): 
     def __init__(self, m: int, n_values: list[int], trials: int):
-        super().__init__()
+        super().__init__("one_choice")
         self.m = m
         self.n_values = n_values
         self.trials = trials
