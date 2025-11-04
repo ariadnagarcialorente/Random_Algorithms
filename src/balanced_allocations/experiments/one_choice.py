@@ -3,9 +3,9 @@ import numpy as np
 
 from .base_experiment import BaseExperiment
 
-class OneChoice: 
+class one_choice: 
     def __init__(self, m: int, n_values: list[int], trials: int):
-        super().__init__("one_choice")
+        super().__init__()
         self.m = m
         self.n_values = n_values
         self.trials = trials
@@ -48,6 +48,17 @@ class OneChoice:
                 'avg_max_load' : np.mean(max_load),
                 'std_max_load' : np.std(max_load)
             } 
+
+    def plot(self, save_folder=None, filename=None, use_3d=False):
+        for n in self.n_values:
+            if n in self.results:
+                print(f"Results for n = {n}")
+                print(f"Average Gap: {self.results[n]['avg_gap']}")
+                print(f"Std Dev Gap: {self.results[n]['std_gap']}")
+                print(f"Average Max Load: {self.results[n]['avg_max_load']}")
+                print(f"Std Dev Max Load: {self.results[n]['std_max_load']}")
+            else:
+                print(f"\nNo results found for n = {n}")
 
         
 
