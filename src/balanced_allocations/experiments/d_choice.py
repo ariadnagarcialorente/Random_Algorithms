@@ -1,12 +1,13 @@
 from .base_experiment import BaseExperiment
 from .choice_runner import choice_runner
 
-class two_choice(BaseExperiment): 
-    def __init__(self, m: int, n_values: list[int], trials: int):
-        super().__init__("two_choice")
+class d_choice(BaseExperiment): 
+    def __init__(self, m: int, n_values: list[int], trials: int, d: int):
+        super().__init__("d_choice")
         self.m = m
         self.n_values = n_values
         self.trials = trials
+        self.d = d
         self.results = {}  
         '''
             results{
@@ -28,8 +29,8 @@ class two_choice(BaseExperiment):
 
     def run(self):
         simulation = choice_runner()
-        self.results = simulation.ball_simulator(self.m, self.n_values, self.trials, 1)
-
+        self.results = simulation.ball_simulator(self.m, self.n_values, self.trials, self.d)
+    
     def plot(self, save_folder=None, filename=None, use_3d=False):
         for n in self.n_values:
             if n in self.results:

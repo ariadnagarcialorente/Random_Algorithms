@@ -1,7 +1,5 @@
-import random
-import numpy as np
-
 from .base_experiment import BaseExperiment
+from .choice_runner import choice_runner
 
 class one_choice(BaseExperiment): 
     def __init__(self, m: int, n_values: list[int], trials: int):
@@ -29,26 +27,9 @@ class one_choice(BaseExperiment):
         #self.gap= []  substituted by results
 
     def run(self):
-
-        for n in self.n_values:
-            gaps = [0] * self.trials
-            max_load = [0] * self.trials
-            for trial in range(self.trials):
-                loads = [0] * self.m
-                for _ in range(n):
-                    bin_idx = random.randint(0, self.m-1)
-                    loads[bin_idx] += 1
-                max_load[trial] = max(loads)
-                gaps[trial] = max_load[trial] - n/self.m
-            self.results[n] = {
-                'avg_gap' : np.mean(gaps),
-                'std_gap' : np.std(gaps),
-                'gap_values' : gaps,
-                'max_loads_values' : max_load,
-                'avg_max_load' : np.mean(max_load),
-                'std_max_load' : np.std(max_load)
-            } 
-
+        simulation = choice_runner()
+        self.results = simulation.ball_simulator(self.m, self.n_values, self.trials, 1)
+    
     def plot(self, save_folder=None, filename=None, use_3d=False):
         for n in self.n_values:
             if n in self.results:
