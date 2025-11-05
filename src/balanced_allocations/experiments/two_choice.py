@@ -28,7 +28,7 @@ class two_choice(BaseExperiment):
 
     def run(self):
         simulation = choice_runner()
-        self.results = simulation.ball_simulator(self.m, self.n_values, self.trials, 1)
+        self.results = simulation.ball_simulator(self.m, self.n_values, self.trials, 1, 1)
 
     def plot(self, save_folder=None, filename=None, use_3d=False):
         for n in self.n_values:

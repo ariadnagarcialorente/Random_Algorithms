@@ -34,17 +34,17 @@ class beta_choice(BaseExperiment):
         #Cases 0 and 1
         if (self.b == 0):
             simulation = choice_runner()
-            self.results = simulation.ball_simulator(self.m, self.n_values, self.trials, 1)
+            self.results = simulation.ball_simulator(self.m, self.n_values, self.trials, 1, 1)
         if (self.b == 1):
             simulation = choice_runner()
-            self.results = simulation.ball_simulator(self.m, self.n_values, self.trials, 2)
+            self.results = simulation.ball_simulator(self.m, self.n_values, self.trials, 2, 1)
 
         ##MESS OF A FUNCTION BUT WORKS
         for n in self.n_values:
 
             gaps = [0] * self.trials
             max_load = [0] * self.trials
-            
+
             for trial in range(self.trials):
                 loads = [0] * self.m
                 for _ in range(n):
