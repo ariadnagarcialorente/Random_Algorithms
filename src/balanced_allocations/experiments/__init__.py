@@ -1,13 +1,11 @@
-from .one_choice import one_choice
-from .two_choice import two_choice
-from .d_choice import d_choice
-from .beta_choice import beta_choice
-from .batched_allocations import batched_allocations
+from .one_choice import OneChoiceExperiment
+from .two_choice import TwoChoiceExperiment
+from .d_choice import DChoiceExperiment
+from .betta_choice import BettaChoiceExperiment
 
 EXPERIMENT_REGISTRY = {
-    "one_choice": one_choice, 
-    "two_choice": two_choice, 
-    "d_choice": d_choice,
-    "beta_choice": beta_choice, 
-    "batched_allocations": batched_allocations
+    "one_choice": OneChoiceExperiment,
+    "two_choice": TwoChoiceExperiment,
+    "d_choice": DChoiceExperiment,
+    "betta_choice": BettaChoiceExperiment,
 }

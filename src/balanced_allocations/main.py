@@ -1,7 +1,14 @@
 import argparse
+import os
+import statistics
+
 import yaml
 from pathlib import Path
 
+from matplotlib import pyplot as plt
+
+from balanced_allocations.experiments.base_experiment import BaseExperiment
+from balanced_allocations.utils.bin_checker import bin_distro_where_n_equal_m, max_gap
 from experiments import EXPERIMENT_REGISTRY
 
 
@@ -84,14 +91,100 @@ def merge_overrides(base_params, overrides):
 
 def run_experiment(exp_name, params, filename):
     """
-    Instantiate and execute a single experiment.
+    Instantiate and execute a single experiment T times.
     """
     if exp_name not in EXPERIMENT_REGISTRY:
         raise KeyError(f"Experiment '{exp_name}' not found in registry.")
     exp_cls = EXPERIMENT_REGISTRY[exp_name]
-    exp = exp_cls(**params)
-    exp.run()
-    exp.plot(save_folder=RESULTS_DIR, filename=filename)
+
+    T = params.pop("T", 1)  # default to 1 if T not specified
+    results_list = []
+
+    for t in range(1, T + 1):
+        exp: BaseExperiment = exp_cls(**params)
+        results = exp.run(len(exp.bins) ** 2)
+        results_list.append(results)
+        print(f"Run {t}/{T} of {exp_name}")
+
+    plot_results(results_list, filename)
+
+
+def plot_results(results_list: list[list[list[int]]], filename_base: str) -> None:
+    """
+    Plot results from multiple experiments.
+
+    :param results_list: list of experiment results, where each result is a list of bin distributions over time
+    :param filename_base: base filename for saving plots
+    """
+    num_experiments = len(results_list)
+    num_steps = len(results_list[0])
+    num_bins = len(results_list[0][0])
+
+    # Compute average gap per n (number of balls)
+    average_gap_per_n: list[float] = []
+    for step in range(num_steps):
+        step_gaps = [max_gap(exp[step]) for exp in results_list]
+        average_gap_per_n.append(sum(step_gaps) / len(step_gaps))
+
+    # --- Compute gaps where n == m and n == m2 ---
+    gaps_where_n_equals_m: list[float] = []
+    gaps_where_n_equals_m2: list[float] = []
+
+    for exp in results_list:
+        distro_m = bin_distro_where_n_equal_m(exp)  # list of rows
+        gaps_where_n_equals_m.append(max_gap(distro_m))
+
+    for exp in results_list:
+        distro_m = exp[-1]  # n=m^2
+        gaps_where_n_equals_m2.append(max_gap(distro_m))
+
+    # --- Plot average gap as trend line ---
+    plt.figure(figsize=(8, 5))
+    step_indices = range(0, num_steps, int((num_bins ** 2) / num_bins))  # plot every 10th point
+    plt.plot([i + 1 for i in step_indices], [average_gap_per_n[i] for i in step_indices], marker='o',
+             label="Average Gap")
+
+    plt.ylim(0, 10)
+
+    # Vertical lines
+    plt.axvline(x=num_bins, color='red', linestyle='--', label="n = m")
+    plt.axvline(x=num_bins ** 2, color='green', linestyle='--', label="n = m²")
+
+    # Horizontal line: average of average_gap_per_n
+    avg_gap_total = sum(average_gap_per_n) / len(average_gap_per_n)
+    plt.axhline(y=avg_gap_total, color='blue', linestyle=':', label="Average Gap Overall")
+
+    plt.xlabel("Number of balls (n)")
+    plt.ylabel("Average gap G_n")
+    plt.title("Average Gap vs Number of Balls")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.legend()
+    plt.savefig(RESULTS_DIR / f"{filename_base}_gap_trend.png")
+    plt.close()
+
+    for idx, gaps in enumerate([gaps_where_n_equals_m, gaps_where_n_equals_m2], start=1):
+        if not gaps:
+            continue
+
+        # Compute statistics
+        mean_gap = statistics.mean(gaps)
+        std_gap = statistics.stdev(gaps) if len(gaps) > 1 else 0.0  # avoid error for single value
+
+        name = f"Histogram of Gaps at n = m (Experiment {filename_base})\n"
+        if idx == 2:
+            name = f"Histogram of Gaps at n = m^2 (Experiment {filename_base})\n"
+
+        plt.figure(figsize=(8, 5))
+        plt.hist(gaps, edgecolor='black')
+        plt.xlabel("Gap G_n")
+        plt.ylabel("Frequency")
+        plt.title(name +
+                  f"Mean = {mean_gap:.2f}, Std = {std_gap:.2f}")
+        plt.grid(axis='y')
+        plt.tight_layout()
+        plt.savefig(RESULTS_DIR / f"{filename_base}_gaps_n_eq_m_exp{idx}.png")
+        plt.close()
 
 
 def main():
@@ -100,6 +193,7 @@ def main():
     overrides = parse_param_overrides(args.param)
 
     experiments = config["experiments"]
+    os.makedirs(RESULTS_DIR, exist_ok=True)
 
     if args.experiment:
         if args.experiment not in experiments:

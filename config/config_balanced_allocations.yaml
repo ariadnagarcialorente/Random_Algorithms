@@ -1,0 +1,22 @@
+experiments:
+  one_choice:
+    - num_bins: 100
+      T: 100
+      bin_selection_mode: "absolute"
+
+  two_choice:
+    - num_bins: 100
+      T: 100
+      bin_selection_mode: "absolute"
+
+  d_choice:
+    - num_bins: 100
+      d: 3
+      T: 100
+      bin_selection_mode: "absolute"
+
+  betta_choice:
+    - num_bins: 100
+      betta: 0.7
+      T: 100
+      bin_selection_mode: "absolute"

@@ -31,9 +31,9 @@ class GaltonTriangleMatrix(BaseExperiment):
         fig, ax = plt.subplots(figsize=(6, 6))
         im = ax.imshow(self.board, cmap="hot", origin="upper")
         fig.colorbar(im, ax=ax, label="Number of balls")
-        ax.set_title(f"Galton Board: Final Positions of Balls (height={self.height}, balls={self.balls})")
-        ax.set_xlabel("Column (j)")
-        ax.set_ylabel("Row (i)")
+        ax.set_title(f"Galton Board: Final Positions of Balls \n (height={self.height}, balls={self.balls})")
+        ax.set_xlabel("Row (i)")
+        ax.set_ylabel("Column (j)")
         # Use dynamic folder if provided
 
         if save_folder:
