@@ -73,6 +73,9 @@ This YAML file defines which experiments to run and their parameters to get the 
 ```bash
 # Run all experiments defined in the YAML
 python src/galton/main.py
+#or
+python -m src.galton.main
+
 ```
 
 This will:
