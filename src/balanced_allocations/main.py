@@ -111,7 +111,7 @@ def run_experiment(exp_name, params, filename):
     if exp_name == "one_choice":
         ylim = 30
 
-    plot_results(results_list, filename, batch_size, ylim=30)
+    plot_results(results_list, filename, batch_size, ylim)
 
 def plot_results(results_list: list[list[list[int]]], filename_base: str, batch_size: int = 1, ylim: int = 10) -> None:
     """
