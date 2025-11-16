@@ -1,6 +1,0 @@
-README.md
-setup.py
-src/balanced_allocations.egg-info/PKG-INFO
-src/balanced_allocations.egg-info/SOURCES.txt
-src/balanced_allocations.egg-info/dependency_links.txt
-src/balanced_allocations.egg-info/top_level.txt
