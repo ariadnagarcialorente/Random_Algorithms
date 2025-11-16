@@ -2,25 +2,21 @@ experiments:
   one_choice:
     - num_bins: 100
       T: 100
-      batch_size: 50
-      bin_selection_mode: "absolute"
+      bin_selection_mode: "partial_k1"
 
   two_choice:
     - num_bins: 100
       T: 100
-      batch_size: 50
-      bin_selection_mode: "absolute"
+      bin_selection_mode: "partial_k1"
 
   d_choice:
     - num_bins: 100
       d: 3
       T: 100
-      batch_size: 50
-      bin_selection_mode: "absolute"
+      bin_selection_mode: "partial_k1"
 
   betta_choice:
     - num_bins: 100
       betta: 0.7
       T: 100
-      batch_size: 50
-      bin_selection_mode: "absolute"
+      bin_selection_mode: "partial_k1"

@@ -1,4 +1,4 @@
-from src.balanced_allocations.models.bins import Bins
+from balanced_allocations.models.bins import Bins
 
 
 class BinInspector:
@@ -17,12 +17,12 @@ class BinInspector:
     # --- Partial: quartiles ---
     def in_top_25(self, index: int) -> bool:
         """Is this bin among the top 25% (>= Q3 value)?"""
-        _, q3 = self.bins.quartile_values()
+        _, q3 = self.bins.quartile_thresholds()
         return self.bins[index] >= q3
 
     def in_bottom_25(self, index: int) -> bool:
         """Is this bin among the bottom 25% (<= Q1 value)?"""
-        q1, _ = self.bins.quartile_values()
+        q1, _ = self.bins.quartile_thresholds()
         return self.bins[index] <= q1
 
     def in_top_75(self, index: int) -> bool:

@@ -1,8 +1,8 @@
 import random
 from typing import Iterable
 
-from src.balanced_allocations.models.bins import Bins
-from src.balanced_allocations.utils.bin_inspector import BinInspector
+from balanced_allocations.models.bins import Bins
+from balanced_allocations.utils.bin_inspector import BinInspector
 
 
 class BinSelector:

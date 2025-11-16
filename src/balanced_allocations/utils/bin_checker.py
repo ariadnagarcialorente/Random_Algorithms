@@ -13,14 +13,16 @@ def max_gap(bins: list[int]) -> float:
     return max(x - avg for x in bins)
 
 
-def bin_distro_where_n_equal_m(bin_distros: list[list[int]]) -> list[int]:
+def bin_distro_where_n_equal_m(results: list[list[int]], batch_size: int = 1) -> list[int]:
     """
-    Find the bin distribution when the number of balls equals the number of bins.
-
-    :param bin_distros: list of bin states over time; each entry is a list[int] for that time step
-    :return: the distribution at the step where total balls = number of bins
+    Extract the bin distribution at the step where n == m.
+    :param results: list of bin distributions over time
+    :param batch_size: number of balls added per step
+    :return: bin distribution when n == m
     """
-    for distro in bin_distros:
-        if sum(distro) >= len(distro):
-            return distro
-    raise ValueError("No distribution found where number of balls equals number of bins")
+    m = len(results[0])  # number of bins
+    step_index = m // batch_size  # index where n == m
+    if step_index < len(results):
+        return results[step_index]
+    else:
+        return results[-1]  # fallback to last step if index out of bounds
