@@ -9,7 +9,7 @@ Use the quick navigation below to jump directly to each section:
 
 👉 [Galton Board Project](#-galton-board-experiments)
 
-👉 [Balanced Allocations Project](#-balanced-allocations-experiments)
+👉 [Balanced Allocations Project](#balanced-allocations-experiments)
 
 ---
 
