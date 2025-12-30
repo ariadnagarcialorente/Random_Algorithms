@@ -7,7 +7,6 @@ import argparse
 import math
 import os
 import struct
-import sys
 
 from csiphash import siphash24
 from cskipdict import SkipDict
@@ -22,7 +21,7 @@ class Element(object):
         self.value = value
         self.count = 1
 
-class RecordinalityEstimator(CardinalityEstimator):
+class Recordinality(CardinalityEstimator):
     def __init__(self, size, hash_key=None, store_values=True):
         if hash_key is None:
             hash_key = os.urandom(16)
@@ -48,7 +47,7 @@ class RecordinalityEstimator(CardinalityEstimator):
                 self.k_records[hash] = Element(value if self.store_values else None)
                 self.modifications += 1
 
-    def cardinality(self):
+    def estimate(self):
         if self.modifications <= self.size:
             return self.modifications
         pow = self.modifications - self.size + 1

@@ -1,9 +1,9 @@
-from .hll import HyperLogLogEstimator
+from .hll import HyperLogLog
 from .rec import RecordinalityEstimator
 from .true_cardinality import TrueCardinalityCounter
 
 ESTIMATOR_REGISTRY = {
-    "hll": HyperLogLogEstimator,
+    "hll": HyperLogLog,
     "rec": RecordinalityEstimator,
     "true": TrueCardinalityCounter,
 }

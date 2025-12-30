@@ -1,1 +1,4 @@
 experiments:
+  estimation_memory_quality:
+    - algorithms: [hll, rec]
+      threshold: 0.99

@@ -1,12 +1,21 @@
-import math
-from scipy.stats import hmean
 import randomhash
 from .base import CardinalityEstimator
 
 class HyperLogLog(CardinalityEstimator):
-    def __init__(self, p: int, hash_count):
+    """
+   HyperLogLog cardinality estimator.
+
+   Estimates the number of distinct elements using fixed memory
+   with probabilistic guarantees.
+   """
+    def __init__(self, p: int, hash_count: int):
+        """
+       :param p: Number of bits used for register indexing.
+                 Number of registers m = 2^p.
+       :param hash_count: Number of hash functions in the hash family.
+       """
         self.p = p
-        self.m = 1 << p
+        self.m = 2 ** p
         self.registers = [0] * self.m
         self.rfh = randomhash.RandomHashFamily(count=hash_count)
 
@@ -15,21 +24,29 @@ class HyperLogLog(CardinalityEstimator):
         return int(h_hex, 16)
 
     def add(self, element: str) -> None:
-
         h = self.hash_function(element)
-        idx = h & (self.m -1)
-        reminder = h >> self.p
 
-        n_zero = bin(reminder).find('1',self.p) + 1
-        self.registers[idx] = max(self.registers[idx], n_zero)
+        # Use the first p bits for the register index
+        idx = h >> (h.bit_length() - self.p)
+        # Remaining bits
+        w = h & ((1 << (h.bit_length() - self.p)) - 1)
+
+        rho = self._rho(w, h.bit_length() - self.p)
+        self.registers[idx] = max(self.registers[idx], rho)
 
     def estimate(self):
-        # ns que es aixo, pero sino dona cosas rares 
-        Z = sum(2.0 ** (-v) for v in self.registers)
+        Z = sum(2.0 ** -v for v in self.registers) # Harmonic mean
         alpha_m = 0.7213 / (1 + 1.079 / self.m)
         return alpha_m * self.m**2 / Z
 
-
+    @staticmethod
+    def _rho(w: int, max_bits: int) -> int:
+        """
+        Counts the number of leading zeros in w, plus one.
+        """
+        if w == 0:
+            return max_bits + 1
+        return max_bits - w.bit_length() + 1
 
 
 
