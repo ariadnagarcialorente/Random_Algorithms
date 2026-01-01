@@ -39,6 +39,10 @@ class HyperLogLog(CardinalityEstimator):
         alpha_m = 0.7213 / (1 + 1.079 / self.m)
         return alpha_m * self.m**2 / Z
 
+    def memory_bytes(self) -> int:
+        int_size_bytes = 8
+        return len(self.registers) * int_size_bytes
+
     @staticmethod
     def _rho(w: int, max_bits: int) -> int:
         """
@@ -47,7 +51,5 @@ class HyperLogLog(CardinalityEstimator):
         if w == 0:
             return max_bits + 1
         return max_bits - w.bit_length() + 1
-
-
 
         

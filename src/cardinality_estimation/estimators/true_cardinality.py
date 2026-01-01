@@ -10,3 +10,7 @@ class TrueCardinalityCounter(CardinalityEstimator):
 
     def estimate(self):
         return len(self._elements)
+
+    def memory_bytes(self) -> int:
+        int_size_bytes = 8
+        return len(self._elements) * int_size_bytes

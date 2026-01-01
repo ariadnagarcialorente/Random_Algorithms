@@ -53,3 +53,7 @@ class Recordinality(CardinalityEstimator):
         pow = self.modifications - self.size + 1
         estimate = (self.size * math.pow(1 + (1.0 / self.size), pow)) - 1
         return int(estimate)
+
+    def memory_bytes(self) -> int:
+        int_size_bytes = 8
+        return len(self.k_records) * int_size_bytes + int_size_bytes
