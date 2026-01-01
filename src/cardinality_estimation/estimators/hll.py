@@ -1,3 +1,4 @@
+import numpy as np
 import randomhash
 from .base import CardinalityEstimator
 
@@ -8,39 +9,41 @@ class HyperLogLog(CardinalityEstimator):
    Estimates the number of distinct elements using fixed memory
    with probabilistic guarantees.
    """
-    def __init__(self, p: int, hash_count: int):
+    def __init__(self, p: int = 1):
         """
        :param p: Number of bits used for register indexing.
                  Number of registers m = 2^p.
        :param hash_count: Number of hash functions in the hash family.
        """
+        super().__init__()
         self.p = p
         self.m = 2 ** p
         self.registers = [0] * self.m
-        self.rfh = randomhash.RandomHashFamily(count=hash_count)
-
-    def hash_function(self, value):
-        h_hex = self.rfh.hashes(value, count=1)[0].hexdigest()
-        return int(h_hex, 16)
 
     def add(self, element: str) -> None:
-        h = self.hash_function(element)
+        h = self._hash(element)
 
-        # Use the first p bits for the register index
-        idx = h >> (h.bit_length() - self.p)
-        # Remaining bits
-        w = h & ((1 << (h.bit_length() - self.p)) - 1)
+        # first p bits → register index
+        idx = h >> (self.INT_SIZE - self.p)
 
-        rho = self._rho(w, h.bit_length() - self.p)
+        # remaining bits
+        w = h & ((1 << (self.INT_SIZE - self.p)) - 1)
+
+        rho = self._rho(w, self.INT_SIZE - self.p)
         self.registers[idx] = max(self.registers[idx], rho)
 
     def estimate(self):
-        Z = sum(2.0 ** -v for v in self.registers) # Harmonic mean
-        alpha_m = 0.7213 / (1 + 1.079 / self.m)
-        return alpha_m * self.m**2 / Z
+        Z = sum(2.0 ** -v for v in self.registers)
+        E = 0.7213 / (1 + 1.079 / self.m) * self.m ** 2 / Z
+
+        # small-range correction
+        V = self.registers.count(0)
+        if V != 0 and E <= 5 / 2 * self.m:
+            E = self.m * np.log(self.m / V)
+        return E
 
     def memory_bytes(self) -> int:
-        int_size_bytes = 8
+        int_size_bytes = int(self.INT_SIZE / 8)
         return len(self.registers) * int_size_bytes
 
     @staticmethod

@@ -22,10 +22,17 @@ class Element(object):
         self.count = 1
 
 class Recordinality(CardinalityEstimator):
-    def __init__(self, size, hash_key=None, store_values=True):
+    def __init__(self, size = 1, hash_key=None, store_values=True):
+        super().__init__()
         if hash_key is None:
             hash_key = os.urandom(16)
-        self.hash = lambda val: struct.unpack('q', siphash24(hash_key, val))[0]
+        self.hash = lambda val: struct.unpack(
+            'q',
+            siphash24(
+                hash_key,
+                val if isinstance(val, bytes) else str(val).encode("utf-8")
+            )
+        )[0]
         self.k_records = SkipDict()
         self.size = size
         self.modifications = 0
@@ -55,5 +62,5 @@ class Recordinality(CardinalityEstimator):
         return int(estimate)
 
     def memory_bytes(self) -> int:
-        int_size_bytes = 8
+        int_size_bytes = int(self.INT_SIZE / 8)
         return len(self.k_records) * int_size_bytes + int_size_bytes

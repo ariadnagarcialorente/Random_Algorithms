@@ -1,4 +1,5 @@
 experiments:
-  estimation_memory_quality:
-    - algorithms: [hll, rec]
-      threshold: 0.99
+  memory_quality_estimation:
+    - algorithms: ["pcsa", "hll", "rec"]
+      minimum_quality_factor: 0.95
+      book_name: "dracula"
