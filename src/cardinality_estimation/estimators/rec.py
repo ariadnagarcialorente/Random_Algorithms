@@ -3,12 +3,8 @@ Inspired by:
 https://github.com/zacharyvoase/python-recordinality/blob/master/recordinality.py
 (la poca documentació que hi ha d'aixó es un document del conrado i aquest git)
 """
-import argparse
 import math
-import os
-import struct
 
-from csiphash import siphash24
 from cskipdict import SkipDict
 
 from .base import CardinalityEstimator
@@ -24,22 +20,13 @@ class Element(object):
 class Recordinality(CardinalityEstimator):
     def __init__(self, size = 1, hash_key=None, store_values=True):
         super().__init__()
-        if hash_key is None:
-            hash_key = os.urandom(16)
-        self.hash = lambda val: struct.unpack(
-            'q',
-            siphash24(
-                hash_key,
-                val if isinstance(val, bytes) else str(val).encode("utf-8")
-            )
-        )[0]
         self.k_records = SkipDict()
         self.size = size
         self.modifications = 0
         self.store_values = store_values
 
     def add(self, value):
-        hash = self.hash(value)
+        hash = self._hash(value)
         if hash in self.k_records:
             element = self.k_records[hash]
             if self.store_values and element.value == value:
@@ -63,4 +50,4 @@ class Recordinality(CardinalityEstimator):
 
     def memory_bytes(self) -> int:
         int_size_bytes = int(self.INT_SIZE / 8)
-        return len(self.k_records) * int_size_bytes + int_size_bytes
+        return len(self.k_records) * int_size_bytes

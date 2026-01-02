@@ -7,7 +7,7 @@ from cardinality_estimation.data_sources.book_source import BookSource
 from cardinality_estimation.estimators.base import CardinalityEstimatorType
 from cardinality_estimation.experiments.base import CardinalityEstimationExperiment
 from cardinality_estimation.estimators import ESTIMATOR_REGISTRY, TrueCardinalityCounter, HyperLogLog, Recordinality, \
-    ProbabilisticCounting
+    PCSA
 
 
 @dataclass
@@ -51,10 +51,11 @@ class MemoryQualityEstimationExperiment(CardinalityEstimationExperiment):
     def run(self):
         """
         Run all estimators until they reach the minimum quality factor.
-        Then continue all estimators to the maximum number of steps any estimator needed.
+        Then continue all estimators until they reach the maximum memory
+        used by any estimator at quality threshold.
         """
-        self.results: dict[CardinalityEstimatorType, list[list[MemoryQualityItem]]] = {}
-        steps_needed = {}
+        self.results = {}
+        memory_at_quality = {}
 
         # Phase 1: run until each estimator reaches quality
         for est_type, est_class in zip(self.estimator_types, self.estimator_classes):
@@ -71,20 +72,40 @@ class MemoryQualityEstimationExperiment(CardinalityEstimationExperiment):
                     self._quality(item.cardinality_estimation, self.true_cardinality)
                     for item in step_results
                 ])
-                print(f'average quality: {avg_quality}')
+
+                print(f"{est_type.name} step {step} avg quality: {avg_quality}")
+
                 if avg_quality >= self.minimum_quality_factor:
                     reached_quality = True
+                    # memory is the same across repetitions → take first
+                    memory_at_quality[est_type] = step_results[0].bytes_used
+                    print(
+                        f"{est_type.name} reached quality at step {step} "
+                        f"using {memory_at_quality[est_type]} bytes"
+                    )
 
-            steps_needed[est_type] = step
-            print(f"{est_type.name} reached minimum quality at step {step}")
+        # Phase 2: continue until all reach max memory used at quality
+        target_memory = max(memory_at_quality.values())
+        print(f"Target memory for all estimators: {target_memory} bytes")
 
-        # Phase 2: continue all estimators to max steps
-        max_steps = max(steps_needed.values())
         for est_type, est_class in zip(self.estimator_types, self.estimator_classes):
-            for step in range(len(self.results[est_type]) + 1, max_steps + 1):
+            step = len(self.results[est_type])
+
+            while True:
+                last_step_results = self.results[est_type][-1]
+                current_memory = last_step_results[0].bytes_used
+
+                if current_memory >= target_memory:
+                    break
+
+                step += 1
                 step_results = self.run_step(est_class, step)
                 self.results[est_type].append(step_results)
-                print(f"{est_type.name} extra step {step}: {step_results}")
+
+                print(
+                    f"{est_type.name} extra step {step}: "
+                    f"memory={step_results[0].bytes_used}"
+                )
 
     def run_step(self, est_class, step):
         """
@@ -93,10 +114,10 @@ class MemoryQualityEstimationExperiment(CardinalityEstimationExperiment):
         step_results: list[MemoryQualityItem] = []
         # Determine parameters
         if est_class is HyperLogLog:
-            estimator_args = {"p": step}
+            estimator_args = {"p": step + 1}
         elif est_class is Recordinality:
             estimator_args = {"size": 2 ** (step - 1)}
-        elif est_class is ProbabilisticCounting:
+        elif est_class is PCSA:
             estimator_args = {"m": 2 ** (step - 1)}
         else:
             raise ValueError(f"Unknown estimator type {est_class}")
@@ -161,7 +182,7 @@ class MemoryQualityEstimationExperiment(CardinalityEstimationExperiment):
         plt.legend()
 
         # Set y-limits from 0 to 2 * true cardinality
-        plt.ylim(0.3, 1.7 * self.true_cardinality)
+        plt.ylim(0, 2 * self.true_cardinality)
 
         # Apply logarithmic scale to x-axis if requested
         if log_x:
