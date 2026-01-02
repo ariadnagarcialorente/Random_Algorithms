@@ -43,16 +43,8 @@ class HyperLogLog(CardinalityEstimator):
         return E
 
     def memory_bytes(self) -> int:
-        int_size_bytes = int(self.INT_SIZE / 8)
-        return len(self.registers) * int_size_bytes
+        bits_per_register = 5  # enough for 64-bit hash
+        return (self.m * bits_per_register) // 8
 
-    @staticmethod
-    def _rho(w: int, max_bits: int) -> int:
-        """
-        Counts the number of leading zeros in w, plus one.
-        """
-        if w == 0:
-            return max_bits + 1
-        return max_bits - w.bit_length() + 1
 
         

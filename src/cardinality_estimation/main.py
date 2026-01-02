@@ -118,12 +118,16 @@ def run_experiment(exp_name: str, params: dict, filename: str):
 
     # Ensure results directory exists
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    filepath = RESULTS_DIR / f"{filename}.png"
+    if exp_name == "memory_quality_estimation":
+        filepath = RESULTS_DIR / f"{filename}.png"
+        exp.save(filepath, log_x=True)
+    elif exp_name == "quality_table":
+        filepath = RESULTS_DIR / f"{filename}.csv"
+        exp.save(filepath)
 
     # Save results (logarithmic x-axis by default if supported)
-    if hasattr(exp, "save"):
-        exp.save(filepath, log_x=True)
-        print(f"✅ Results saved to: {filepath}")
+
+    print(f"✅ Results saved to: {filepath}")
 
 def main():
     args = parse_args()
@@ -146,7 +150,7 @@ def main():
         for run_idx, params in enumerate(runs, start=1):
             merged = merge_overrides(params, overrides)
             print(f"▶ Running {exp_name} (run {run_idx}) with params: {merged}")
-            run_experiment(exp_name, merged, f"{exp_name}_{run_idx}")
+            run_experiment(exp_name, merged, f"{exp_name}_{params['book_name'] if params['book_name'] else 'synthetic'}")
 
 
 if __name__ == "__main__":

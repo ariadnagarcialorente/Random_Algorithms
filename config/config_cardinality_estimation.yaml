@@ -1,4 +1,21 @@
 experiments:
+  quality_table:
+    - algorithms: [ "pcsa", "hll", "rec" ]
+      book_name: "crusoe"
+    - algorithms: ["pcsa", "hll", "rec"]
+      book_name: "dracula"
+    - algorithms: [ "pcsa", "hll", "rec" ]
+      book_name: "iliad"
+    - algorithms: [ "pcsa", "hll", "rec" ]
+      book_name: "mare-balena"
+    - algorithms: [ "pcsa", "hll", "rec" ]
+      book_name: "midsummer-nights-dream"
+    - algorithms: [ "pcsa", "hll", "rec" ]
+      book_name: "quijote"
+    - algorithms: [ "pcsa", "hll", "rec" ]
+      book_name: "valley-fear"
+    - algorithms: [ "pcsa", "hll", "rec" ]
+      book_name: "war-peace"
   memory_quality_estimation:
     - algorithms: ["pcsa", "hll", "rec"]
       minimum_quality_factor: 0.95
