@@ -142,8 +142,6 @@ results/galton/
 
 ---
 
----
-
 # ⚖️ Balanced Allocations Experiments
 
 This project analyzes load balancing in the classic **balls-and-bins** model through extensive empirical experimentation. The goal is to study the **gap**
