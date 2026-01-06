@@ -4,12 +4,15 @@ This repository contains **two independent projects**:
 
 1. **🎲 Galton Board Experiments** — simulations and statistical analysis
 2. **⚖️ Balanced Allocations** — experiments on load balancing and the power of choices
+3. **📏Cardinality Estimator**  — experiment on performance on three different estimator
 
 Use the quick navigation below to jump directly to each section:
 
 👉 [Galton Board Project](#-galton-board-experiments)
 
 👉 [Balanced Allocations Project](#-balanced-allocations-experiments)
+
+👉 [Cardinality Estimation Project](#-cardinality-estimation-experiments)
 
 ---
 
@@ -20,10 +23,16 @@ Random_Algorithms/
 ├── config/                        # YAML configurations of experiments and parameters
 │   └── config_galton.yaml         
 │   └── config_balanced_allocations.yaml  
+│   └── config_cardinality_estimation.yaml  
 │
 ├── results/                        # Automatically created output folder for plots
 │   └── galton/                    
-│   └── balanced_allocations/                 
+│   └── balanced_allocations/  
+│   └── cardinality_estimation/                 
+│
+├── data/                          # For Cardinality Estimation 
+│   └── books/                    
+│   └── generated/  
 │
 ├── src/
 │   └── galton/
@@ -35,6 +44,9 @@ Random_Algorithms/
 │       │   ├── binomial_normal.py # Binomial vs Normal comparison
 │       │   └── galton_triangle_matrix.py  # Other Galton-based experiments
 │   └── balanced_allocations/
+│       ├── main.py   
+│       ├── ...
+│   └── cardinality_estimation/
 │       ├── main.py   
 │       ├── ...
 │
@@ -178,3 +190,46 @@ Results are saved in:
 ```text
 results/balanced_allocations/
 ```
+---
+
+# 📏 Cardinality Estimation Experiments
+
+This project studies through the empirical experimentation different probabilistic cardinality estimation algorithms. The aim is to estimate the cardinality with limited memory. 
+
+The project compares three algorithms: **HyperLogLog**, **PCSA** (Probabilistic Counting with Stochastic Averaging), and **Recordinality** across real-world text datasets and synthetic Zipfian data.
+
+---
+
+## 🧪 Configuration: config/config_cardinality_estimator.yaml
+
+This YAML file defines which experiments to run and their parameters. The default experiments and parameters are the ones used at the assignment 3.
+
+---
+
+## 🚀 Running Experiments
+
+```bash
+# Run all experiments defined in the YAML
+python src/cardinality_estimation/main.py
+#or
+python -m src.cardinality_estimation.main
+
+```
+
+This will:
+
+* Load experiments from `config/config_cardinality_estimation.yaml`
+* Execute each experiment
+* Save plots to the `results/cardinality_estimation/` folder
+
+---
+
+## 📊 Output and Results
+
+Results are saved in:
+
+```text
+results/cardinality_estimation/
+```
+
+---
