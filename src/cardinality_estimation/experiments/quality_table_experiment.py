@@ -1,5 +1,6 @@
 import numpy as np
 from cardinality_estimation.data_sources.book_source import BookSource
+from cardinality_estimation.data_sources.synthetic_source import Synthetic_source
 from cardinality_estimation.estimators import ESTIMATOR_REGISTRY, TrueCardinalityCounter
 from cardinality_estimation.estimators.base import CardinalityEstimatorType
 from cardinality_estimation.experiments.base import CardinalityEstimationExperiment
@@ -13,7 +14,11 @@ class QualityTableExperiment(CardinalityEstimationExperiment):
         estimator_types: list[CardinalityEstimatorType],
         memory_bytes: int = 1024,  # memory budget in bytes
         repetitions: int = 50,
-        book_name: str = None
+        book_name: str = None,
+        n: int = 50, 
+        N: int = 100, 
+        alpha: float = 1.0,
+        output_file: str = None
     ):
         self.estimator_types = estimator_types
         self.estimator_classes = [
@@ -26,7 +31,7 @@ class QualityTableExperiment(CardinalityEstimationExperiment):
         if book_name:
             self.data_source = BookSource(book_name)
         else:
-            raise ValueError("No data source provided (SyntheticSource not implemented).")
+            self.data_source = Synthetic_source(n, N, alpha, output_file)
 
         self.results: dict[CardinalityEstimatorType, dict[str, float]] = {}
 

@@ -4,6 +4,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 from cardinality_estimation.data_sources.book_source import BookSource
+from cardinality_estimation.data_sources.synthetic_source import Synthetic_source
 from cardinality_estimation.estimators.base import CardinalityEstimatorType
 from cardinality_estimation.experiments.base import CardinalityEstimationExperiment
 from cardinality_estimation.estimators import ESTIMATOR_REGISTRY, TrueCardinalityCounter, HyperLogLog, Recordinality, \
@@ -17,7 +18,7 @@ class MemoryQualityItem:
 
 class MemoryQualityEstimationExperiment(CardinalityEstimationExperiment):
 
-    def __init__(self, estimator_types: list[CardinalityEstimatorType], minimum_quality_factor: float = 0.95, repetitions: int = 25, book_name: str = None):
+    def __init__(self, estimator_types: list[CardinalityEstimatorType], minimum_quality_factor: float = 0.95, repetitions: int = 25, book_name: str = None, n: int = 50, N: int = 100, alpha: float = 1.0, output_file: str = None):
         self.estimator_types = estimator_types
         self.estimator_classes = [
             ESTIMATOR_REGISTRY[estimator_type.value]
@@ -29,7 +30,7 @@ class MemoryQualityEstimationExperiment(CardinalityEstimationExperiment):
         if book_name:
             self.data_source = BookSource(book_name)
         else:
-            pass # SyntheticSource...
+            self.data_source = Synthetic_source(n, N, alpha, output_file)
 
         self.results: dict[CardinalityEstimatorType, list[list[MemoryQualityItem]]] = {}
 

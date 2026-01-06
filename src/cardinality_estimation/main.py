@@ -149,9 +149,13 @@ def main():
             runs = [runs]
         for run_idx, params in enumerate(runs, start=1):
             merged = merge_overrides(params, overrides)
+            if 'book_name' in merged:
+                filename = f"{exp_name}_{merged['book_name']}"
+            else:
+                filename = f"{exp_name}_synthetic_n{merged['n']}_N{merged['N']}_alpha{merged['alpha']}"
+            
             print(f"▶ Running {exp_name} (run {run_idx}) with params: {merged}")
-            run_experiment(exp_name, merged, f"{exp_name}_{params['book_name'] if params['book_name'] else 'synthetic'}")
-
+            run_experiment(exp_name, merged, filename)
 
 if __name__ == "__main__":
     main()

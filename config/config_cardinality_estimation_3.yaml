@@ -1,0 +1,27 @@
+experiments:
+  quality_table:
+    - algorithms: [ "pcsa", "hll", "rec" ]
+      n: 1000
+      N: 10000
+      alpha: 1.0
+      output_file: "synthetic_1000_10000_1.0.txt"
+    - algorithms: [ "pcsa", "hll", "rec" ]
+      n: 5000
+      N: 50000
+      alpha: 1.0
+      output_file: "synthetic_5000_50000_1.0.txt"
+    - algorithms: [ "pcsa", "hll", "rec" ]
+      n: 10000
+      N: 100000
+      alpha: 1.0
+      output_file: "synthetic_10000_100000_1.0.txt"
+      
+  memory_quality_estimation:
+    - algorithms: ["pcsa", "hll", "rec"]
+      minimum_quality_factor: 0.95
+      n: 5000
+      N: 50000
+      alpha: 1.0
+      output_file: "synthetic_memory_5000_50000_1.0.txt"
+
+  

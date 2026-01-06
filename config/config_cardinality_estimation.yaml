@@ -1,22 +1,39 @@
 experiments:
   quality_table:
     - algorithms: [ "pcsa", "hll", "rec" ]
-      book_name: "crusoe"
-    - algorithms: ["pcsa", "hll", "rec"]
-      book_name: "dracula"
+      n: 50000
+      N: 100000
+      alpha: 0.5
+      output_file: "synthetic_10000_100000_0.5.txt"
     - algorithms: [ "pcsa", "hll", "rec" ]
-      book_name: "iliad"
+      n: 50000
+      N: 100000
+      alpha: 1.0
+      output_file: "synthetic_10000_100000_1.0.txt"
     - algorithms: [ "pcsa", "hll", "rec" ]
-      book_name: "mare-balena"
-    - algorithms: [ "pcsa", "hll", "rec" ]
-      book_name: "midsummer-nights-dream"
-    - algorithms: [ "pcsa", "hll", "rec" ]
-      book_name: "quijote"
-    - algorithms: [ "pcsa", "hll", "rec" ]
-      book_name: "valley-fear"
-    - algorithms: [ "pcsa", "hll", "rec" ]
-      book_name: "war-peace"
+      n: 50000
+      N: 100000
+      alpha: 1.5
+      output_file: "synthetic_10000_100000_1.5.txt"
+      
   memory_quality_estimation:
     - algorithms: ["pcsa", "hll", "rec"]
       minimum_quality_factor: 0.95
-      book_name: "dracula"
+      n: 5000
+      N: 50000
+      alpha: 1.0
+      output_file: "synthetic_memory_5000_50000_1.0.txt"
+    - algorithms: ["pcsa", "hll", "rec"]
+      minimum_quality_factor: 0.95
+      n: 5000
+      N: 50000
+      alpha: 1.5
+      output_file: "synthetic_memory_5000_50000_1.5.txt"
+    - algorithms: ["pcsa", "hll", "rec"]
+      minimum_quality_factor: 0.95
+      n: 5000
+      N: 50000
+      alpha: 0.5
+      output_file: "synthetic_memory_5000_50000_0.5.txt"
+
+  
